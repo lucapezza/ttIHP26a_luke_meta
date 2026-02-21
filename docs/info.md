@@ -9,11 +9,17 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works. TBD.
+TBD. Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
+Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
+Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
+Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
 
 ## How to test
 
-Explain how to use your project. TBD.
+TBD. Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
+Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
+Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
+Placehoder.  Placehoder.  Placehoder.  Placehoder.  Placehoder.
 
 ## External hardware
 
