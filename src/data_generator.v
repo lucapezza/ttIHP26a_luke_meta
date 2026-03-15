@@ -128,7 +128,7 @@ module data_generator (
     input wire enable, //(0 = stop, 1 = run)
     input wire [2:0] rc, // ring control
     input wire [1:0] pb, // prescaler-bypass control
-    input wire data_in_bypass;
+    input wire data_in_bypass,
     output wire data_out
 );
 
