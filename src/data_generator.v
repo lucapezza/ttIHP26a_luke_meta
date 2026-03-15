@@ -124,8 +124,8 @@ module ripple_divider (
 endmodule
 
 module data_generator (
-    input wire reset_n, (0 = reset, 1 = run)
-    input wire enable, (0 = stop, 1 = run)
+    input wire reset_n, //(0 = reset, 1 = run)
+    input wire enable, //(0 = stop, 1 = run)
     input wire [2:0] rc, // ring control
     input wire [1:0] pb, // prescaler-bypass control
     input wire data_in_bypass;

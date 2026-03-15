@@ -23,8 +23,8 @@ module tt_um_luke_meta (
     
     wire _unused = &{ clk, ui_in[7:6], uio_in };
 
-    (* keep hierarchy *) data_generator data_gen (
-        .reset_n(reset_n),
+    (* keep_hierarchy *) data_generator data_gen (
+        .reset_n(rst_n),
         .enable(ena),
         .rc(ui_in[2:0]),
         .pb(ui_in[4:3]),
@@ -33,7 +33,7 @@ module tt_um_luke_meta (
     );    
 
     assign uio_oe  = 8'b00000001; // Only uio_out[0] is an output, the rest are inputs   
-    uio_out[7:1] = 0; // Unused outputs should be tied to 0 
+    assign uio_out[7:1] = 7'b0; // Unused outputs should be tied to 0 
     assign uo_out = 0;
 
 
