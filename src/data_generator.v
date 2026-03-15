@@ -64,7 +64,7 @@ module inverter_chain #(
     genvar i;
     generate
         for (i = 0; i < N; i = i + 1) begin : inv_chain
-            (* keep_hierarchy *) not_gate not_gate_inst (
+            (* keep_hierarchy *) inverter inverter_inst (
                 .in  (stage[i]),
                 .out (stage[i+1])
             );
