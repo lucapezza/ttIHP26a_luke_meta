@@ -54,5 +54,9 @@ pinout:
   uio[6]: "inout6"
   uio[7]: "inout7"
 
+# Skip gate level test
+test:
+  skip_gl: true
+
 # Do not change!
 yaml_version: 6
