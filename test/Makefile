@@ -6,7 +6,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = data_generator.v ChiselTop.v tt_um_chisel_template.v
+PROJECT_SOURCES = inverter.v and2.v and4.v or2.v or3.v or4.v inverter_chain.v data_generator.v tt_um_chisel_template.v
 
 
 ifneq ($(GATES),yes)

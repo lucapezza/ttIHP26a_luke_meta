@@ -3,77 +3,6 @@
 
 //
 
-module inverter (
-    input   wire in,
-    output  wire out
-);
-
-    /*
-    assign #23ps out = ~in;
-    */
-
-    /*
-    (* keep_hierarchy *) sg13g2_inv_1    sg13g2_inv_1_inst (
-        .A  (in),
-        .Y  (out)
-    );
-    */
-
-    /*
-    (* keep_hierarchy *) sg13g2_inv_2    sg13g2_inv_2_inst (
-        .A  (in),
-        .Y  (out)
-    );
-    */
-
-    (* keep_hierarchy *) sg13g2_inv_4    sg13g2_inv_4_inst (
-        .A  (in),
-        .Y  (out)
-    );
-
-    /*
-    (* keep_hierarchy *) sg13g2_inv_8    sg13g2_inv_8_inst (
-        .A  (in),
-        .Y  (out)
-    );
-    */
-
-    /*
-    (* keep_hierarchy *) sg13g2_inv_16    sg13g2_inv_16_inst (
-        .A  (in),
-        .Y  (out)
-    );
-    */
-
-
-endmodule
-
-
-module inverter_chain #(
-    parameter integer N = 10   // number of inverters
-)(
-    input  wire in,
-    output wire out
-);
-
-    wire [N:0] stage;
-
-    assign stage[0] = in;
-    assign out = stage[N];
-
-    genvar i;
-    generate
-        for (i = 0; i < N; i = i + 1) begin : inv_chain
-            (* keep_hierarchy *) inverter inverter_inst (
-                .in  (stage[i]),
-                .out (stage[i+1])
-            );
-        end
-    endgenerate
-
-endmodule
-
-
 module one_hot_encoder_3to8 (
     input  wire [2:0] in,
     output wire [7:0] out
@@ -102,7 +31,7 @@ module one_hot_encoder_2to4 (
 
 endmodule
 
-
+// A rippledivider by 2 and 4.
 module ripple_divider (
     input  wire clk_in,
     output wire div2,
@@ -123,6 +52,8 @@ module ripple_divider (
 
 endmodule
 
+// A generator of async data. It consists of a tunable ring oscillator and some dividers. 
+// Standard cell gates are used in the oscillator path for boolean expression to avoid glitches.
 module data_generator (
     input wire reset_n, //(0 = reset, 1 = run)
     input wire enable, //(0 = stop, 1 = run)
@@ -156,16 +87,33 @@ module data_generator (
     (* keep_hierarchy *) inverter_chain #(.N(400)) inverter_chain_g (.in(b_f), .out(b_g) );
 
     (* keep, dont_touch *) wire run;
-    assign run = ~rc_one_hot[0] & reset_n & enable & ~pb_one_hot[0]; // rc_one_hot[0] = 1 means stop the ring, pb_one_hot[0] = 1 means bypass
+    //assign run = ~rc_one_hot[0] & reset_n & enable & ~pb_one_hot[0]; // rc_one_hot[0] = 1 means stop the ring, pb_one_hot[0] = 1 means bypass
+    (* keep_hierarchy *) and4 and4_run_inst (.in1(~rc_one_hot[0]), .in2(reset_n), .in3(enable), .in4(b_c), .out(~pb_one_hot[0]));
 
-    assign b_in = run & (
-        (b_a & rc_one_hot[1]) | 
-        (b_b & rc_one_hot[2]) | 
-        (b_c & rc_one_hot[3]) | 
-        (b_d & rc_one_hot[4]) | 
-        (b_e & rc_one_hot[5]) | 
-        (b_f & rc_one_hot[6]) | 
-        (b_g & rc_one_hot[7]));
+
+    //assign b_in = run & (
+    //    (b_a & rc_one_hot[1]) | 
+    //    (b_b & rc_one_hot[2]) | 
+    //    (b_c & rc_one_hot[3]) | 
+    //    (b_d & rc_one_hot[4]) | 
+    //    (b_e & rc_one_hot[5]) | 
+    //    (b_f & rc_one_hot[6]) | 
+    //    (b_g & rc_one_hot[7]));
+
+    (* keep, dont_touch *) wire b_a_gated, b_b_gated, b_c_gated, b_d_gated, b_e_gated, b_f_gated, b_g_gated;
+    (*keep_hierarchy *) and2 and2_b_a (.in1(b_a), .in2(rc_one_hot[1]), .out(b_a_gated));
+    (*keep_hierarchy *) and2 and2_b_b (.in1(b_b), .in2(rc_one_hot[2]), .out(b_b_gated));
+    (*keep_hierarchy *) and2 and2_b_c (.in1(b_c), .in2(rc_one_hot[3]), .out(b_c_gated));
+    (*keep_hierarchy *) and2 and2_b_d (.in1(b_d), .in2(rc_one_hot[4]), .out(b_d_gated));
+    (*keep_hierarchy *) and2 and2_b_e (.in1(b_e), .in2(rc_one_hot[5]), .out(b_e_gated));
+    (*keep_hierarchy *) and2 and2_b_f (.in1(b_f), .in2(rc_one_hot[6]), .out(b_f_gated));
+    (*keep_hierarchy *) and2 and2_b_g (.in1(b_g), .in2(rc_one_hot[7]), .out(b_g_gated));
+
+    (* keep, dont_touch *) wire b_in_or_1, b_in_or_2, b_in_or;
+    (* keep_hierarchy *) or4 or4_b_in_or_1 (.in1(b_a_gated), .in2(b_b_gated), .in3(b_c_gated), .in4(b_d_gated), .out(b_in_or_1));
+    (* keep_hierarchy *) or3 or3_b_in_or_2 (.in1(b_e_gated), .in2(b_f_gated), .in3(b_g_gated), .out(b_in_or_2));
+    (* keep_hierarchy *) or2 or2_b_in (.in1(b_in_or_1), .in2(b_in_or_2), .out(b_in_or));
+    (* keep_hierarchy *) and2 and2_b_in (.in1(b_in_or), .in2(run), .out(b_in));
 
     (* keep, dont_touch *) wire ring_out, ring_out_div2, ring_out_div4;
     assign ring_out = b_in;
@@ -176,9 +124,17 @@ module data_generator (
         .div4(ring_out_div4)
     );
 
-    assign data_out = (data_in_bypass & pb_one_hot[0]) |
-                      (ring_out & pb_one_hot[1]) | 
-                      (ring_out_div2 & pb_one_hot[2]) | 
-                      (ring_out_div4 & pb_one_hot[3]);
+    //assign data_out = (data_in_bypass & pb_one_hot[0]) |
+    //                  (ring_out & pb_one_hot[1]) | 
+    //                  (ring_out_div2 & pb_one_hot[2]) | 
+    //                  (ring_out_div4 & pb_one_hot[3]);
+
+    (* keep, dont_touch *) wire data_in_bypass_gated, ring_out_gated, ring_out_div2_gated, ring_out_div4_gated;
+    (* keep_hierarchy *) and2 and2_data_in_bypass (.in1(data_in_bypass), .in2(pb_one_hot[0]), .out(data_in_bypass_gated));
+    (* keep_hierarchy *) and2 and2_ring_out (.in1(ring_out), .in2(pb_one_hot[1]), .out(ring_out_gated));
+    (* keep_hierarchy *) and2 and2_ring_out_div2 (.in1(ring_out_div2), .in2(pb_one_hot[2]), .out(ring_out_div2_gated));
+    (* keep_hierarchy *) and2 and2_ring_out_div4 (.in1(ring_out_div4), .in2(pb_one_hot[3]), .out(ring_out_div4_gated));
+
+    (* keep_hierarchy *) or4 or4_data_out (.in1(data_in_bypass_gated), .in2(ring_out_gated), .in3(ring_out_div2_gated), .in4(ring_out_div4_gated), .out(data_out));
 
 endmodule

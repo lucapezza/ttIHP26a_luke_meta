@@ -17,8 +17,14 @@ project:
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
+    - "inverter.v"
+    - "and2.v"
+    - "and4.v"
+    - "or2.v"
+    - "or3.v"
+    - "or4.v"
+    - "inverter_chain.v"
     - "data_generator.v"
-    - "ChiselTop.v"
     - "tt_um_chisel_template.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
@@ -53,10 +59,6 @@ pinout:
   uio[5]: "inout5"
   uio[6]: "inout6"
   uio[7]: "inout7"
-
-# Skip gate level test
-test:
-  skip_gl: true
 
 # Do not change!
 yaml_version: 6
