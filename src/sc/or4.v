@@ -21,7 +21,7 @@ module or4 (
         .B  (in2),
         .C  (in3),
         .D  (in4),
-        .S  (out)
+        .X  (out)
     );
 
 endmodule
