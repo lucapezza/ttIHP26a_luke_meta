@@ -4,7 +4,7 @@
 // Author: Luke
 // A reset synchronizer (asynchronous assertion, synchronous deassertion).
 
-module reset_syncronizer (
+module reset_synchronizer (
     input  wire clk,
     input  wire reset_n_async,   // asynchronous active-low reset
     output wire reset_n_sync     // synchronized active-low reset

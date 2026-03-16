@@ -33,7 +33,7 @@ module tt_um_luke_meta (
 
     // Reset synchronizer
     wire rst_n_sync;
-    (* keep_hierarchy *) reset_syncronizer rst_sync (
+    (* keep_hierarchy *) reset_synchronizer rst_sync (
         .clk(clk),
         .reset_n_async(rst_n),
         .reset_n_sync(rst_n_sync)
