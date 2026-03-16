@@ -5,7 +5,7 @@ project:
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "A demostrator of metastability effects."      # One line description of what your project does
   language:     "Chisel" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     25000000       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     50000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
@@ -17,12 +17,12 @@ project:
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
-    - "inverter.v"
-    - "and2.v"
-    - "and4.v"
-    - "or2.v"
-    - "or3.v"
-    - "or4.v"
+    - "sc/inverter.v"
+    - "sc/and2.v"
+    - "sc/and4.v"
+    - "sc/or2.v"
+    - "sc/or3.v"
+    - "sc/or4.v"
     - "inverter_chain.v"
     - "data_generator.v"
     - "tt_um_chisel_template.v"

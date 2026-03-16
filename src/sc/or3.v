@@ -19,7 +19,7 @@ module or3 (
         .A  (in1),
         .B  (in2),
         .C  (in3),
-        .Y  (out)
+        .X  (out)
     );
 
 endmodule
