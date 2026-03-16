@@ -25,6 +25,12 @@ project:
     - "sc/or4.v"
     - "inverter_chain.v"
     - "data_generator.v"
+    - "calibrate_data_generator.v"
+    - "tunable_delay.v"
+    - "metastability_detector_1.v"
+    - "reset_synchronizer.v"
+    - "input_syncronizer.v"
+    - "start_delay.v"
     - "tt_um_chisel_template.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.

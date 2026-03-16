@@ -84,7 +84,7 @@ module data_generator (
     (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_d (.in(b_c), .out(b_d) );
     (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_e (.in(b_d), .out(b_e) );
     (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_f (.in(b_e), .out(b_f) );
-    (* keep_hierarchy *) inverter_chain #(.N(400)) inverter_chain_g (.in(b_f), .out(b_g) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_g (.in(b_f), .out(b_g) );
 
     (* keep, dont_touch *) wire run;
     //assign run = ~rc_one_hot[0] & reset_n & enable & ~pb_one_hot[0]; // rc_one_hot[0] = 1 means stop the ring, pb_one_hot[0] = 1 means bypass

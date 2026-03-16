@@ -23,18 +23,87 @@ module tt_um_luke_meta (
     
     wire _unused = &{ clk, ui_in[7:6], uio_in };
 
-    (* keep_hierarchy *) data_generator data_gen (
-        .reset_n(rst_n),
-        .enable(ena),
-        .rc(ui_in[2:0]),
-        .pb(ui_in[4:3]),
-        .data_in_bypass(ui_in[5]),
-        .data_out(uio_out[0])
-    );    
+    // Tunable delay
+    wire clk_delayed;
+    (* keep_hierarchy *) tunable_delay tunable_delay_inst (
+        .td(uio_in[7:4]), // tunable delay control
+        .in(clk),
+        .out(clk_delayed)
+    );
 
-    assign uio_oe  = 8'b00000001; // Only uio_out[0] is an output, the rest are inputs   
-    assign uio_out[7:1] = 7'b0; // Unused outputs should be tied to 0 
-    assign uo_out = 0;
+    // Reset synchronizer
+    wire rst_n_sync;
+    (* keep_hierarchy *) reset_syncronizer rst_sync (
+        .clk(clk),
+        .reset_n_async(rst_n),
+        .reset_n_sync(rst_n_sync)
+    );
+
+
+    // 
+    wire ena_sync;
+    (* keep_hierarchy *) input_sync input_sync_ena_inst (
+        .clk(clk),
+        .async_in(ena),
+        .sync_out(ena_sync)
+    );
+
+    // Start delay counter
+    wire ena_delayed;
+    (* keep_hierarchy *) start_delay #(.N(5)) start_delay_inst (
+        .clk(clk),
+        .reset_n(rst_n_sync),
+        .enable(ena_sync),
+        .run(ena_delayed)
+    );
+
+    // Data generator
+    wire data;
+    (* keep_hierarchy *) data_generator data_generator_inst (
+        .reset_n(rst_n_sync),
+        .enable(ena_delayed),
+        .rc(ui_in[2:0]), // ring control
+        .pb(ui_in[4:3]), // prescaler-bypass control
+        .data_in_bypass(ui_in[5]),
+        .data_out(data)
+    );
+
+    // Calibrate data generator.
+    wire calibrate_data;
+    (* keep_hierarchy *) calibrate_data_generator calibrate_data_generator_inst (
+        .clk(clk),
+        .reset_n(rst_n_sync),
+        .calibrate_data(calibrate_data)
+    );
+
+    // Metastability detector
+    wire metastability;
+    (* keep_hierarchy *) metastability_detector_1 metastability_detector_1_inst (
+        .clk(clk),
+        .clk_delayed(clk_delayed),
+        .reset_n(rst_n_sync),
+        .calibrate(uio_in[3]), 
+        .calibrate_data(calibrate_data), 
+        .data(data),
+        .metastability(metastability)
+    );
+
+    // Metastability counter
+    (* keep_hierarchy *) metastability_counter metastability_counter_inst (
+        .clk(clk),
+        .reset_n(rst_n_sync),
+        .enable(metastability),
+        .count(uo_out)
+    );
+
+    assign uio_out[2] = clk_delayed ^ clk; // for measuring the actual delay
+    assign uio_out[1] = data; // for checking the data pattern
+    assign uio_out[0] = metastability; // for checking if metastability is detected
+
+
+    assign uio_oe  = 8'b00000111; // Only uio_out[2:0] are outputs
+    assign uio_out[7:3] = 5'b0; // Unused outputs should be tied to 0 
+
 
 
     /*
