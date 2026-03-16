@@ -27,7 +27,7 @@ module metastability_detector_1 (
         if (!reset_n)
             ff_dut <= 1'b0;
         else
-            ff_dut <= in;
+            ff_dut <= data_in;
 
     reg ff_clk;
     reg ff_clk_delayed;
