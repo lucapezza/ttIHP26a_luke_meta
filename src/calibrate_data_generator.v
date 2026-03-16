@@ -10,7 +10,7 @@ module calibrate_data_generator (
 );
 
     // generate calibration signal
-    output reg  calibrate_data_int;
+    reg calibrate_data_int;
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n)
             calibrate_data_int <= 1'b0;
