@@ -88,7 +88,7 @@ module data_generator (
 
     (* keep, dont_touch *) wire run;
     //assign run = ~rc_one_hot[0] & reset_n & enable & ~pb_one_hot[0]; // rc_one_hot[0] = 1 means stop the ring, pb_one_hot[0] = 1 means bypass
-    (* keep_hierarchy *) and4 and4_run_inst (.in1(~rc_one_hot[0]), .in2(reset_n), .in3(enable), .in4(b_c), .out(~pb_one_hot[0]));
+    (* keep_hierarchy *) and4 and4_run_inst (.in1(~rc_one_hot[0]), .in2(reset_n), .in3(enable), .in4(b_c), .out(run));
 
 
     //assign b_in = run & (
