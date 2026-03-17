@@ -29,7 +29,7 @@ project:
     - "tunable_delay.v"
     - "metastability_detector_1.v"
     - "reset_synchronizer.v"
-    - "input_syncronizer.v"
+    - "input_synchronizer.v"
     - "start_delay.v"
     - "tt_um_chisel_template.v"
 
