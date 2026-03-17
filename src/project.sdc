@@ -83,6 +83,7 @@ set_timing_derate -late [expr 1+[expr $::env(TIME_DERATING_CONSTRAINT) / 100]]
 create_generated_clock \
     -name clk_delayed \
     -source [get_ports clk] \
+    -combinational \
     [get_pins meta_top_inst/tunable_delay_inst/or4_tunable_delay_out/sg13g2_or4_2_inst/X]
 
 set_clock_latency -min 0  [get_clocks clk_delayed]
