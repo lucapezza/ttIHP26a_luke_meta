@@ -1,3 +1,6 @@
+`default_nettype none
+`timescale 1ps/1ps
+
 // Author: Luke
 // A wrapper for the and2 standard cell.
 // Options are:
@@ -11,7 +14,7 @@ module and2 (
 );
 
     /*
-    assign #25ps out = in1 & in2;
+    assign #25 out = in1 & in2;
     */
 
     (* keep_hierarchy *) sg13g2_and2_2 sg13g2_and2_2_inst (
