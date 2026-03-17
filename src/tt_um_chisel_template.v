@@ -80,7 +80,8 @@ module tt_um_luke_meta (
     wire metastability;
     (* keep_hierarchy *) metastability_detector_1 metastability_detector_1_inst (
         .clk(clk),
-        .clk_delayed(clk_delayed),
+        //.clk_delayed(clk_delayed),
+        .clk_delayed(clk), // for testing without delay
         .reset_n(rst_n_sync),
         .calibrate(uio_in[3]), 
         .calibrate_data(calibrate_data), 
@@ -96,7 +97,7 @@ module tt_um_luke_meta (
         .count(uo_out)
     );
 
-    assign uio_out[2] = clk_delayed ^ clk; // for measuring the actual delay
+    assign uio_out[2] = 1'b0;//clk_delayed ^ clk; // for measuring the actual delay
     assign uio_out[1] = data; // for checking the data pattern
     assign uio_out[0] = metastability; // for checking if metastability is detected
 
