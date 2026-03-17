@@ -102,6 +102,11 @@ set_clock_groups -asynchronous \
     -group [get_clocks del_clk]
 
 
+set_false_path -from [get_ports uio_in[4]]
+set_false_path -from [get_ports uio_in[5]]
+set_false_path -from [get_ports uio_in[6]]
+set_false_path -from [get_ports uio_in[7]]
+
 if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {
     unset_propagated_clock [all_clocks]
 } else {
