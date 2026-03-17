@@ -77,15 +77,14 @@ module data_generator (
 
     (* keep, dont_touch *) wire b_in, b_start, b_a, b_b, b_c, b_d, b_e, b_f, b_g;
 
-    //DIVIDED ALL BY 10 FOR TESTING
     (* keep_hierarchy *) inverter inverter_start (.in(b_in), .out(b_start)); // first inverter (all the following chain must be even)
-    (* keep_hierarchy *) inverter_chain #(.N(10)) inverter_chain_a (.in(b_start), .out(b_a) );
-    (* keep_hierarchy *) inverter_chain #(.N(10)) inverter_chain_b (.in(b_a), .out(b_b) );
-    (* keep_hierarchy *) inverter_chain #(.N(10)) inverter_chain_c (.in(b_b), .out(b_c) );
-    (* keep_hierarchy *) inverter_chain #(.N(10)) inverter_chain_d (.in(b_c), .out(b_d) );
-    (* keep_hierarchy *) inverter_chain #(.N(10)) inverter_chain_e (.in(b_d), .out(b_e) );
-    (* keep_hierarchy *) inverter_chain #(.N(10)) inverter_chain_f (.in(b_e), .out(b_f) );
-    (* keep_hierarchy *) inverter_chain #(.N(10)) inverter_chain_g (.in(b_f), .out(b_g) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_a (.in(b_start), .out(b_a) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_b (.in(b_a), .out(b_b) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_c (.in(b_b), .out(b_c) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_d (.in(b_c), .out(b_d) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_e (.in(b_d), .out(b_e) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_f (.in(b_e), .out(b_f) );
+    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_g (.in(b_f), .out(b_g) );
 
     (* keep, dont_touch *) wire run;
     //assign run = ~rc_one_hot[0] & reset_n & enable & ~pb_one_hot[0]; // rc_one_hot[0] = 1 means stop the ring, pb_one_hot[0] = 1 means bypass
