@@ -57,7 +57,8 @@ module tunable_delay (
     (* keep_hierarchy *) inverter_chain #(.N(40)) inverter_chain_12 (.in(out_11), .out(out_12) );
     (* keep_hierarchy *) inverter_chain #(.N(40)) inverter_chain_13 (.in(out_12), .out(out_13) );
     (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_14 (.in(out_13), .out(out_14) );
-    (* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_15 (.in(out_14), .out(out_15) );
+    (* keep_hierarchy *) inverter inverter_clk (.in(in), .out(out_15));
+    //(* keep_hierarchy *) inverter_chain #(.N(100)) inverter_chain_15 (.in(out_14), .out(out_15) );
 
     (* keep, dont_touch *) wire out_0_gated, out_1_gated, out_2_gated, out_3_gated, out_4_gated, out_5_gated, out_6_gated, out_7_gated, out_8_gated, out_9_gated, out_10_gated, out_11_gated, out_12_gated, out_13_gated, out_14_gated, out_15_gated;
     (* keep_hierarchy *) and2 and2_out_0 (.in1(out_0), .in2(td_one_hot[0]), .out(out_0_gated));

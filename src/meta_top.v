@@ -78,12 +78,19 @@ module meta_top (
         .calibrate_data(calibrate_data)
     );
 
+   // 
+    wire calibration_mode_in_sync;
+    (* keep_hierarchy *) input_synchronizer input_synchronizer_ena_inst (
+        .clk(clk),
+        .async_in(calibration_mode_in),
+        .sync_out(calibration_mode_in_sync)
+    );
+
     // Metastability detector
     wire metastability;
     (* keep_hierarchy *) metastability_detector_1 metastability_detector_1_inst (
         .clk(clk),
         .clk_delayed(clk_delayed),
-        //.clk_delayed(clk), // for testing without delay
         .reset_n(rst_n_sync),
         .calibrate(calibration_mode_in), 
         .calibrate_data(calibrate_data), 
@@ -99,7 +106,7 @@ module meta_top (
         .count(metastability_count_out)
     );
 
-    assign clk_delayed_monitor_out = 1'b0;//clk_delayed ^ clk; // for measuring the actual delay
+    assign clk_delayed_monitor_out = clk_delayed ^ clk; // for measuring the actual delay
     assign internal_data_out = data; // for checking the data pattern
     assign metastability_detected_out = metastability; // for checking if metastability is detected
 
