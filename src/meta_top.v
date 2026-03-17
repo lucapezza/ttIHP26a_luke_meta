@@ -82,8 +82,8 @@ module meta_top (
     wire metastability;
     (* keep_hierarchy *) metastability_detector_1 metastability_detector_1_inst (
         .clk(clk),
-        //.clk_delayed(clk_delayed),
-        .clk_delayed(clk), // for testing without delay
+        .clk_delayed(clk_delayed),
+        //.clk_delayed(clk), // for testing without delay
         .reset_n(rst_n_sync),
         .calibrate(calibration_mode_in), 
         .calibrate_data(calibrate_data), 

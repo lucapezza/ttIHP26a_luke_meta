@@ -83,6 +83,6 @@ module tunable_delay (
     (* keep_hierarchy *) or4 or4_out_or_3 (.in1(out_8_gated), .in2(out_9_gated), .in3(out_10_gated), .in4(out_11_gated), .out(out_or_3));
     (* keep_hierarchy *) or4 or4_out_or_4 (.in1(out_12_gated), .in2(out_13_gated), .in3(out_14_gated), .in4(out_15_gated), .out(out_or_4));
 
-    (* keep_hierarchy *) or4 or4_out_or (.in1(out_or_1), .in2(out_or_2), .in3(out_or_3), .in4(out_or_4), .out(out));
+    (* keep_hierarchy *) or4 or4_tunable_delay_out (.in1(out_or_1), .in2(out_or_2), .in3(out_or_3), .in4(out_or_4), .out(out));
 
 endmodule
