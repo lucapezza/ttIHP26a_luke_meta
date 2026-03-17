@@ -13,7 +13,7 @@ if { [info exists ::env(CLOCK_PORT)] } {
     }
 }
 set port_args [get_ports $clock_port]
-puts "\[INFO] Using clock $clock_port…"
+puts "\[INFO] LUKECOFFE Using clock $clock_port…"
 create_clock {*}$port_args -name $clock_port -period $::env(CLOCK_PERIOD)
 
 set input_delay_value [expr $::env(CLOCK_PERIOD) * $::env(IO_DELAY_CONSTRAINT) / 100]
