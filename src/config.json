@@ -34,6 +34,7 @@
   "//": "Configuration docs: https://librelane.readthedocs.io/en/latest/reference/configuration.html",
 
   "//": "Experiments Luke",
+  "FALLBACK_SDC_FILE": "dir::project.sdc",
   "//": "SETUP_SLACK_MARGIN: -10.0",
   "//": "HOLD_SLACK_MARGIN: -10.0",
 
