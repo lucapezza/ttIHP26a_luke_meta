@@ -80,7 +80,7 @@ module meta_top (
 
    // 
     wire calibration_mode_in_sync;
-    (* keep_hierarchy *) input_synchronizer input_synchronizer_ena_inst (
+    (* keep_hierarchy *) input_synchronizer input_synchronizer_calibration_mode_inst (
         .clk(clk),
         .async_in(calibration_mode_in),
         .sync_out(calibration_mode_in_sync)
