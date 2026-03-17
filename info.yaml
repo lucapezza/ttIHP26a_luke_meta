@@ -28,6 +28,7 @@ project:
     - "calibrate_data_generator.v"
     - "tunable_delay.v"
     - "metastability_detector_1.v"
+    - "metastability_counter.v"
     - "reset_synchronizer.v"
     - "input_synchronizer.v"
     - "start_delay.v"
