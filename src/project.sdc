@@ -72,8 +72,26 @@ puts "\[INFO] Setting timing derate to: $::env(TIME_DERATING_CONSTRAINT)%"
 set_timing_derate -early [expr 1-[expr $::env(TIME_DERATING_CONSTRAINT) / 100]]
 set_timing_derate -late [expr 1+[expr $::env(TIME_DERATING_CONSTRAINT) / 100]]
 
-if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {
-    unset_propagated_clock [all_clocks]
-} else {
-    set_propagated_clock [all_clocks]
-}
+# Generated delayed clock
+
+# Add uncertainty to cover variable delay
+#set_clock_uncertainty <delay_range> [get_clocks clk_delayed]
+
+# Make sure clocks are propagated
+#set_propagated_clock [all_clocks]
+
+create_generated_clock \
+    -name clk_delayed \
+    -source [get_ports clk] \
+    [get_pins meta_top_inst/tunable_delay_inst/or4_tunable_delay_out/sg13g2_or4_2_inst/X]
+
+set_clock_latency -min 0  [get_clocks clk_delayed]
+set_clock_latency -max 10 [get_clocks clk_delayed]
+
+set_propagated_clock [all_clocks]
+
+#if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {
+#    unset_propagated_clock [all_clocks]
+#} else {
+#    set_propagated_clock [all_clocks]
+#}
