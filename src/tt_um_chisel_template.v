@@ -21,107 +21,27 @@ module tt_um_luke_meta (
     // assign uio_out = 0;
     // assign uio_oe  = 0;
     
+    
     wire _unused = &{ui_in[7:6], uio_in[2:0] };
-
-    // Tunable delay
-    wire clk_delayed;
-    (* keep_hierarchy *) tunable_delay tunable_delay_inst (
-        .td(uio_in[7:4]), // tunable delay control
-        .in(clk),
-        .out(clk_delayed)
-    );
-
-    // Reset synchronizer
-    wire rst_n_sync;
-    (* keep_hierarchy *) reset_synchronizer rst_sync (
-        .clk(clk),
-        .reset_n_async(rst_n),
-        .reset_n_sync(rst_n_sync)
-    );
-
-
-    // 
-    wire ena_sync;
-    (* keep_hierarchy *) input_synchronizer input_synchronizer_ena_inst (
-        .clk(clk),
-        .async_in(ena),
-        .sync_out(ena_sync)
-    );
-
-    // Start delay counter
-    wire ena_delayed;
-    (* keep_hierarchy *) start_delay #(.N(5)) start_delay_inst (
-        .clk(clk),
-        .reset_n(rst_n_sync),
-        .enable(ena_sync),
-        .run(ena_delayed)
-    );
-
-    // Data generator
-    wire data;
-    (* keep_hierarchy *) data_generator data_generator_inst (
-        .reset_n(rst_n_sync),
-        .enable(ena_delayed),
-        .rc(ui_in[2:0]), // ring control
-        .pb(ui_in[4:3]), // prescaler-bypass control
-        .data_in_bypass(ui_in[5]),
-        .data_out(data)
-    );
-
-    // Calibrate data generator.
-    wire calibrate_data;
-    (* keep_hierarchy *) calibrate_data_generator calibrate_data_generator_inst (
-        .clk(clk),
-        .reset_n(rst_n_sync),
-        .calibrate_data(calibrate_data)
-    );
-
-    // Metastability detector
-    wire metastability;
-    (* keep_hierarchy *) metastability_detector_1 metastability_detector_1_inst (
-        .clk(clk),
-        //.clk_delayed(clk_delayed),
-        .clk_delayed(clk), // for testing without delay
-        .reset_n(rst_n_sync),
-        .calibrate(uio_in[3]), 
-        .calibrate_data(calibrate_data), 
-        .data(data),
-        .metastability(metastability)
-    );
-
-    // Metastability counter
-    (* keep_hierarchy *) metastability_counter metastability_counter_inst (
-        .clk(clk),
-        .reset_n(rst_n_sync),
-        .enable(metastability),
-        .count(uo_out)
-    );
-
-    assign uio_out[2] = 1'b0;//clk_delayed ^ clk; // for measuring the actual delay
-    assign uio_out[1] = data; // for checking the data pattern
-    assign uio_out[0] = metastability; // for checking if metastability is detected
-
 
     assign uio_oe  = 8'b00000111; // Only uio_out[2:0] are outputs
     assign uio_out[7:3] = 5'b0; // Unused outputs should be tied to 0 
 
 
 
-    /*
-    wire reset = !rst_n;
-
-    // Just wrap the Chisel generated Verilog
-    ChiselTop ChiselTop(
-        .clock(clk),
-        .reset(reset),
-        .io_ui_in(ui_in),
-        .io_uo_out(uo_out),
-        .io_uio_in(uio_in),
-        .io_uio_out(uio_out),
-        .io_uio_oe(uio_oe)
+    (* keep_hierarchy *) meta_top meta_top_inst (
+        .clk(clk),
+        .rst_n(rst_n),
+        .ena(ena),
+        .clk_delayed_monitor_out(uio_out[2]),
+        .metastability_detected_out(uio_out[0]),
+        .internal_data_out(uio_out[1]),
+        .external_data_in(ui_in[5]), 
+        .calibration_mode_in(uio_in[3]), 
+        .tune_delay_ctrl_in(uio_in[7:4]), 
+        .ring_ctrl_in(ui_in[2:0]), 
+        .prescaler_bypass_ctrl_in(ui_in[4:3]), 
+        .metastability_count_out(uo_out) 
     );
-
-    wire _unused = &{ ena };
-    */
 
 endmodule

@@ -32,6 +32,7 @@ project:
     - "reset_synchronizer.v"
     - "input_synchronizer.v"
     - "start_delay.v"
+    - "meta_top.v"
     - "tt_um_chisel_template.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
