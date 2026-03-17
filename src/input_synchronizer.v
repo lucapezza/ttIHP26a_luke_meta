@@ -4,7 +4,7 @@
 // Author: Luke
 // A simple 3 flip-flop syncronizer (no reset).
 
-module input_syncronizer (
+module input_synchronizer (
     input  wire clk,
     input  wire async_in,
     output wire sync_out

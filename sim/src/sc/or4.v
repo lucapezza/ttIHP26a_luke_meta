@@ -15,10 +15,9 @@ module or4 (
     output  wire out
 );
 
-    /*
     assign #25 out = in1 | in2 | in3 | in4;
-    */
 
+    /*
     (* keep_hierarchy *) sg13g2_or4_2 sg13g2_or4_2_inst (
         .A  (in1),
         .B  (in2),
@@ -26,5 +25,6 @@ module or4 (
         .D  (in4),
         .X  (out)
     );
+    */
 
 endmodule

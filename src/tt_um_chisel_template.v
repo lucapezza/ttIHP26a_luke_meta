@@ -21,7 +21,7 @@ module tt_um_luke_meta (
     // assign uio_out = 0;
     // assign uio_oe  = 0;
     
-    wire _unused = &{ clk, ui_in[7:6], uio_in };
+    wire _unused = &{ui_in[7:6], uio_in[2:0] };
 
     // Tunable delay
     wire clk_delayed;
@@ -42,7 +42,7 @@ module tt_um_luke_meta (
 
     // 
     wire ena_sync;
-    (* keep_hierarchy *) input_sync input_sync_ena_inst (
+    (* keep_hierarchy *) input_synchronizer input_synchronizer_ena_inst (
         .clk(clk),
         .async_in(ena),
         .sync_out(ena_sync)

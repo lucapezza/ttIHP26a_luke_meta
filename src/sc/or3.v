@@ -1,3 +1,6 @@
+`default_nettype none
+`timescale 1ps/1ps
+
 // Author: Luke
 // A wrapper for the or3 standard cell.
 // Options are:
@@ -12,7 +15,7 @@ module or3 (
 );
 
     /*
-    assign #25ps out = in1 | in2 | in3;
+    assign #25 out = in1 | in2 | in3;
     */
 
     (* keep_hierarchy *) sg13g2_or3_2 sg13g2_or3_2_inst (

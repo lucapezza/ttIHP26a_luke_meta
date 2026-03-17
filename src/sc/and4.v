@@ -1,3 +1,6 @@
+`default_nettype none
+`timescale 1ps/1ps
+
 // Author: Luke
 // A wrapper for the and4 standard cell.
 // Options are:
@@ -13,7 +16,7 @@ module and4 (
 );
 
     /*
-    assign #25ps out = in1 & in2 & in3 & in4;
+    assign #25 out = in1 & in2 & in3 & in4;
     */
 
     (* keep_hierarchy *) sg13g2_and4_2 sg13g2_and4_2_inst (

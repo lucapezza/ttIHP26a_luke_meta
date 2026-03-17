@@ -1,7 +1,7 @@
 `default_nettype none
 `timescale 1ps/1ps
 
-// Author: Luke
+// Athor: Luke
 // A wrapper for the inverter standard cell.
 // Options are:
 // sg13g2_inv_1
@@ -15,13 +15,13 @@ module inverter (
     output  wire out
 );
 
-    /*
     assign #25 out = ~in;
-    */
 
+    /*
     (* keep_hierarchy *) sg13g2_inv_4 sg13g2_inv_4_inst (
         .A  (in),
         .Y  (out)
     );
+    */
 
 endmodule

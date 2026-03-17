@@ -35,7 +35,7 @@ module tunable_delay (
     output wire out
 );
 
-    (* keep, dont_touch *) wire [16:0] td_one_hot;
+    (* keep, dont_touch *) wire [15:0] td_one_hot;
     (* keep_hierarchy *) one_hot_encoder_4to16 td_encoder (
         .in(td),
         .out(td_one_hot)
