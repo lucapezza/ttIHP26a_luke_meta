@@ -80,24 +80,21 @@ set_timing_derate -late [expr 1+[expr $::env(TIME_DERATING_CONSTRAINT) / 100]]
 # Make sure clocks are propagated
 #set_propagated_clock [all_clocks]
 
-#create_generated_clock \
+create_generated_clock \
     -name clk_delayed \
     -source [get_ports clk] \
     -combinational \
     [get_pins meta_top_inst/tunable_delay_inst/or4_tunable_delay_out/sg13g2_or4_2_inst/X]
 
-#set_clock_latency -min 0  [get_clocks clk_delayed]
-#set_clock_latency -max 10 [get_clocks clk_delayed]
+set_clock_latency -min 0  [get_clocks clk_delayed]
+set_clock_latency -max 10 [get_clocks clk_delayed]
 
 #set_propagated_clock [all_clocks]
 
 
-
-# Ring oscillator clock on internal pin
-create_clock -name del_clk -period 20.0 [get_pins meta_top_inst/tunable_delay_inst/or4_tunable_delay_out/sg13g2_or4_2_inst/X]
-
 # Declare asynchronous relationship
-set_clock_groups -asynchronous \
+#create_clock -name del_clk -period 20.0 [get_pins meta_top_inst/tunable_delay_inst/or4_tunable_delay_out/sg13g2_or4_2_inst/X]
+#set_clock_groups -asynchronous \
     -group [get_clocks clk] \
     -group [get_clocks del_clk]
 
