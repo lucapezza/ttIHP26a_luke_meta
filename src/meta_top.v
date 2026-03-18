@@ -93,7 +93,7 @@ module meta_top (
         .clk(clk),
         .clk_delayed(clk_delayed),
         .reset_n(rst_n_sync),
-        .calibrate(calibration_mode_in), 
+        .calibrate(calibration_mode_in_sync), 
         .calibrate_data(calibrate_data), 
         .data(data),
         .metastability(metastability_1)
@@ -104,7 +104,7 @@ module meta_top (
         .clk(clk),
         .clk_delayed(clk_delayed),
         .reset_n(rst_n_sync),
-        .calibrate(calibration_mode_in), 
+        .calibrate(calibration_mode_in_sync), 
         .calibrate_data(calibrate_data), 
         .data(data),
         .metastability(metastability_2)

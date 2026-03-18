@@ -4,7 +4,7 @@
 // Author: Luke
 // A metastability detector (V2).
 
-module metastability_detector_1 (
+module metastability_detector_2 (
     input wire clk,
     input wire clk_delayed, // delayed version of clk with tunable delay
     input wire reset_n, //(0 = reset, 1 = run)
