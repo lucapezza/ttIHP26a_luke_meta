@@ -17,6 +17,7 @@ module meta_top (
     
     input  wire external_data_in,
     input  wire calibration_mode_in,
+    input  wire detector_1_2_select_in, // 1 for detector 1, 0 for detector 2
 
     input  wire [3:0] tune_delay_ctrl_in,
     input  wire [2:0] ring_ctrl_in,
@@ -87,7 +88,7 @@ module meta_top (
     );
 
     // Metastability detector
-    wire metastability;
+    wire metastability_1;
     (* keep_hierarchy *) metastability_detector_1 metastability_detector_1_inst (
         .clk(clk),
         .clk_delayed(clk_delayed),
@@ -95,8 +96,22 @@ module meta_top (
         .calibrate(calibration_mode_in), 
         .calibrate_data(calibrate_data), 
         .data(data),
-        .metastability(metastability)
+        .metastability(metastability_1)
     );
+
+    wire metastability_2;
+    (* keep_hierarchy *) metastability_detector_2 metastability_detector_2_inst (
+        .clk(clk),
+        .clk_delayed(clk_delayed),
+        .reset_n(rst_n_sync),
+        .calibrate(calibration_mode_in), 
+        .calibrate_data(calibrate_data), 
+        .data(data),
+        .metastability(metastability_2)
+    );
+
+    wire metastability;
+    assign metastability = detector_1_2_select_in ? metastability_2 : metastability_1; // select which detector to use 
 
     // Metastability counter
     (* keep_hierarchy *) metastability_counter metastability_counter_inst (
