@@ -6,7 +6,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = sc/inverter.v sc/and2.v sc/and4.v sc/or2.v sc/or3.v sc/or4.v inverter_chain.v data_generator.v calibrate_data_generator.v tunable_delay.v metastability_detector_1.v metastability_counter.v reset_synchronizer.v input_synchronizer.v start_delay.v meta_top.v tt_um_chisel_template.v 
+PROJECT_SOURCES = sc/inverter.v sc/and2.v sc/and4.v sc/or2.v sc/or3.v sc/or4.v inverter_chain.v data_generator.v calibrate_data_generator.v tunable_delay.v hold_buffer.v metastability_detector_1.v metastability_counter.v reset_synchronizer.v input_synchronizer.v start_delay.v meta_top.v tt_um_chisel_template.v 
 
 
 ifneq ($(GATES),yes)
