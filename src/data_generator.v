@@ -32,7 +32,7 @@ module one_hot_encoder_2to4 (
 endmodule
 
 // A rippledivider by 2 and 4.
-module ripple_divider (
+module ripple_divider_no (
     input  wire clk_in,
     output wire div2,
     output wire div4
@@ -49,6 +49,51 @@ module ripple_divider (
 
     assign div2 = q0;
     assign div4 = q1;
+
+endmodule
+
+module ripple_divider (
+    input  wire clk_in,
+    input  wire reset_n,   // active-low reset
+    output wire div8,
+    output wire div16
+);
+
+    reg q0;
+    reg q1;
+    reg q2;
+    reg q3;
+
+    // First stage
+    always @(posedge clk_in or negedge reset_n)
+        if (!reset_n)
+            q0 <= 1'b0;
+        else
+            q0 <= ~q0;
+
+    // Second stage
+    always @(posedge q0 or negedge reset_n)
+        if (!reset_n)
+            q1 <= 1'b0;
+        else
+            q1 <= ~q1;
+
+    // Third stage
+    always @(posedge q1 or negedge reset_n)
+        if (!reset_n)
+            q2 <= 1'b0;
+        else
+            q2 <= ~q2;
+
+    // Fourth stage
+    always @(posedge q2 or negedge reset_n)
+        if (!reset_n)
+            q3 <= 1'b0;
+        else
+            q3 <= ~q3;
+
+    assign div8  = q2;
+    assign div16 = q3;
 
 endmodule
 
@@ -115,26 +160,22 @@ module data_generator (
     (* keep_hierarchy *) or2 or2_b_in (.in1(b_in_or_1), .in2(b_in_or_2), .out(b_in_or));
     (* keep_hierarchy *) and2 and2_b_in (.in1(b_in_or), .in2(run), .out(b_in));
 
-    (* keep, dont_touch *) wire ring_out, ring_out_div2, ring_out_div4;
+    (* keep, dont_touch *) wire ring_out, ring_out_div8, ring_out_div16;
     assign ring_out = b_in;
 
     (* keep_hierarchy *) ripple_divider ripple_divider_inst (
         .clk_in(ring_out),
-        .div2(ring_out_div2),
-        .div4(ring_out_div4)
+        .reset_n(reset_n),
+        .div8(ring_out_div8),
+        .div16(ring_out_div16)
     );
 
-    //assign data_out = (data_in_bypass & pb_one_hot[0]) |
-    //                  (ring_out & pb_one_hot[1]) | 
-    //                  (ring_out_div2 & pb_one_hot[2]) | 
-    //                  (ring_out_div4 & pb_one_hot[3]);
-
-    (* keep, dont_touch *) wire data_in_bypass_gated, ring_out_gated, ring_out_div2_gated, ring_out_div4_gated;
+    (* keep, dont_touch *) wire data_in_bypass_gated, ring_out_gated, ring_out_div8_gated, ring_out_div16_gated;
     (* keep_hierarchy *) and2 and2_data_in_bypass (.in1(data_in_bypass), .in2(pb_one_hot[0]), .out(data_in_bypass_gated));
     (* keep_hierarchy *) and2 and2_ring_out (.in1(ring_out), .in2(pb_one_hot[1]), .out(ring_out_gated));
-    (* keep_hierarchy *) and2 and2_ring_out_div2 (.in1(ring_out_div2), .in2(pb_one_hot[2]), .out(ring_out_div2_gated));
-    (* keep_hierarchy *) and2 and2_ring_out_div4 (.in1(ring_out_div4), .in2(pb_one_hot[3]), .out(ring_out_div4_gated));
+    (* keep_hierarchy *) and2 and2_ring_out_div8 (.in1(ring_out_div8), .in2(pb_one_hot[2]), .out(ring_out_div8_gated));
+    (* keep_hierarchy *) and2 and2_ring_out_div16 (.in1(ring_out_div16), .in2(pb_one_hot[3]), .out(ring_out_div16_gated));
 
-    (* keep_hierarchy *) or4 or4_data_out (.in1(data_in_bypass_gated), .in2(ring_out_gated), .in3(ring_out_div2_gated), .in4(ring_out_div4_gated), .out(data_out));
+    (* keep_hierarchy *) or4 or4_data_out (.in1(data_in_bypass_gated), .in2(ring_out_gated), .in3(ring_out_div8_gated), .in4(ring_out_div16_gated), .out(data_out));
 
 endmodule
