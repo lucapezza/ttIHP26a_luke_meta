@@ -31,6 +31,8 @@ module metastability_detector_1 (
 
     reg ff_clk;
     reg ff_clk_delayed;
+    reg ff_clk_delayed_sync;
+
 
     // sample with clk
     always @(posedge clk or negedge reset_n)
@@ -46,8 +48,15 @@ module metastability_detector_1 (
         else
             ff_clk_delayed <= ff_dut;
 
+    // sync delayed sample with clk
+    always @(posedge clk or negedge reset_n)
+        if (!reset_n)
+            ff_clk_delayed_sync <= 1'b0;
+        else
+            ff_clk_delayed_sync <= ff_clk_delayed;
+
     wire xor_out;
-    assign xor_out = ff_clk ^ ff_clk_delayed;
+    assign xor_out = ff_clk ^ ff_clk_delayed_sync; // if they are different, it means metastability happened
     
     reg sync1;
     reg sync2;
