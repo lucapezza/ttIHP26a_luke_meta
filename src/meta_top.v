@@ -19,7 +19,7 @@ module meta_top (
     input  wire calibration_mode_in,
     input  wire detector_1_2_select_in, // 1 for detector 1, 0 for detector 2
 
-    input  wire [3:0] tune_delay_ctrl_in,
+    input  wire [4:0] tune_delay_ctrl_in,
     input  wire [2:0] ring_ctrl_in,
     input  wire [1:0] prescaler_bypass_ctrl_in,
 
