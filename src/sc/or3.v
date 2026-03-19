@@ -18,7 +18,7 @@ module or3 (
     assign #25 out = in1 | in2 | in3;
     */
 
-    (* keep_hierarchy *) sg13g2_or3_2 sg13g2_or3_2_inst (
+    (* keep_hierarchy *) sg13g2_or3_2 u_sg13g2_or3_2 (
         .A  (in1),
         .B  (in2),
         .C  (in3),

@@ -2,108 +2,106 @@
 `timescale 1ps/1ps
 
 // Author: Luke
-// Top-level module for the metastability demonstrator.
-
-`default_nettype none
+// Top-level module for the metastability demonstrator. To be wrapped by tt_um_luke_meta.v for pin assignment.
 
 module meta_top (
-    input  wire       clk,      // clock
-    input  wire       rst_n,     // reset_n - low to reset
-    input  wire       ena,      // becomes 1 when the design is powered
+    input  wire clk,
+    input  wire reset_n, // reset_n - low to reset
+    input  wire enable, // becomes 1 when the design is powered
 
-    output wire tune_delay_monitor,
-    output wire metastability_detected,
-    output wire data_monitor,
-    
-    input  wire external_data,
-    input  wire calibration_mode,
-    input  wire detector_select, // 1 for detector 1, 0 for detector 2
-
-    input  wire [4:0] tune_delay_ctrl,
     input  wire [2:0] data_frequency_ctrl,
     input  wire [1:0] prescaler_bypass_ctrl,
+    input  wire external_data,
+    input  wire detector_select, // 1 for detector 1, 0 for detector 2
+    input  wire calibration_mode,
+
+    output wire metastability_detected,
+    output wire data_monitor,
+    output wire tune_delay_monitor,
+    input  wire [4:0] tune_delay_ctrl,
 
     output wire [7:0] metastability_count_out
 );
 
     // Tunable delay
     wire clk_delayed;
-    (* keep_hierarchy *) tunable_delay tunable_delay_inst (
-        .td(tune_delay_ctrl), // tunable delay control
+    (* keep_hierarchy *) tunable_delay u_tunable_delay (
+        .td_ctrl(tune_delay_ctrl), // tunable delay control
         .in(clk),
         .out(clk_delayed)
     );
 
     // Reset synchronizer
-    wire rst_n_sync;
-    (* keep_hierarchy *) reset_synchronizer rst_sync (
+    wire reset_n_sync;
+    (* keep_hierarchy *) reset_synchronizer u_reset_synchronizer (
         .clk(clk),
-        .reset_n_async(rst_n),
-        .reset_n_sync(rst_n_sync)
+        .reset_n_async(reset_n),
+        .reset_n_sync(reset_n_sync)
     );
 
 
-    // 
-    wire ena_sync;
-    (* keep_hierarchy *) input_synchronizer input_synchronizer_ena_inst (
+    // Enable signal synchronizer
+    wire enable_sync;
+    (* keep_hierarchy *) input_synchronizer u_input_synchronizer_enable (
         .clk(clk),
-        .async_in(ena),
-        .sync_out(ena_sync)
+        .async_in(enable),
+        .sync_out(enable_sync)
     );
 
     // Start delay counter
-    wire ena_delayed;
-    (* keep_hierarchy *) start_delay #(.N(5)) start_delay_inst (
+    wire enable_delayed;
+    (* keep_hierarchy *) start_delay #(.N(5)) u_start_delay (
         .clk(clk),
-        .reset_n(rst_n_sync),
-        .enable(ena_sync),
-        .run(ena_delayed)
+        .reset_n(reset_n_sync),
+        .enable(enable_sync),
+        .run(enable_delayed)
     );
 
     // Data generator
     wire data;
-    (* keep_hierarchy *) data_generator data_generator_inst (
-        .reset_n(rst_n_sync),
-        .enable(ena_delayed),
-        .rc(data_frequency_ctrl), // ring control
-        .pb(prescaler_bypass_ctrl), // prescaler-bypass control
+    (* keep_hierarchy *) data_generator u_data_generator (
+        .reset_n(reset_n_sync),
+        .enable(enable_delayed),
+        .r_ctrl(data_frequency_ctrl), // ring control
+        .pb_ctrl(prescaler_bypass_ctrl), // prescaler-bypass control
         .data_in_bypass(external_data),
         .data_out(data)
     );
 
     // Calibrate data generator.
     wire calibrate_data;
-    (* keep_hierarchy *) calibrate_data_generator calibrate_data_generator_inst (
+    (* keep_hierarchy *) calibrate_data_generator u_calibrate_data_generator (
         .clk(clk),
-        .reset_n(rst_n_sync),
+        .reset_n(reset_n_sync),
         .calibrate_data(calibrate_data)
     );
 
-   // 
+   // Calibration mode signal synchronizer
     wire calibration_mode_sync;
-    (* keep_hierarchy *) input_synchronizer input_synchronizer_calibration_mode_inst (
+    (* keep_hierarchy *) input_synchronizer u_input_synchronizer_calibration_mode (
         .clk(clk),
         .async_in(calibration_mode),
         .sync_out(calibration_mode_sync)
     );
 
-    // Metastability detector
+    // Metastability detector 1
     wire metastability_1;
-    (* keep_hierarchy *) metastability_detector_1 metastability_detector_1_inst (
+    (* keep_hierarchy *) metastability_detector_1 u_metastability_detector_1 (
         .clk(clk),
         .clk_delayed(clk_delayed),
-        .reset_n(rst_n_sync),
+        .reset_n(reset_n_sync),
         .calibrate(calibration_mode_sync), 
         .calibrate_data(calibrate_data), 
         .data(data),
         .metastability(metastability_1)
     );
 
+    // Metastability detector 1
     wire metastability_2;
-    (* keep_hierarchy *) metastability_detector_2 metastability_detector_2_inst (
+    (* keep_hierarchy *) metastability_detector_2 u_metastability_detector_2 (
         .clk(clk),
         .clk_delayed(clk_delayed),
-        .reset_n(rst_n_sync),
+        .reset_n(reset_n_sync),
         .calibrate(calibration_mode_sync), 
         .calibrate_data(calibrate_data), 
         .data(data),
@@ -111,12 +109,12 @@ module meta_top (
     );
 
     wire metastability;
-    assign metastability = detector_select ? metastability_2 : metastability_1; // select which detector to use 
+    assign metastability = detector_select ? metastability_2 : metastability_1;
 
     // Metastability counter
-    (* keep_hierarchy *) metastability_counter metastability_counter_inst (
+    (* keep_hierarchy *) metastability_counter u_metastability_counter (
         .clk(clk),
-        .reset_n(rst_n_sync),
+        .reset_n(reset_n_sync),
         .enable(metastability),
         .count(metastability_count_out)
     );

@@ -2,7 +2,7 @@
 `timescale 1ps/1ps
 
 // Author: Luke
-// A simple 3 flip-flop syncronizer (no reset).
+// A simple 3 flip-flop syncronizer.
 
 module input_synchronizer (
     input  wire clk,

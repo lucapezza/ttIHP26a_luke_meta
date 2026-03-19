@@ -2,7 +2,7 @@
 `timescale 1ps/1ps
 
 // Author: Luke
-// A simple start delay module. When enable goes high, it waits for a N^2 clock cycles before setting run high.
+// A simple start delay module. When enable goes high, it waits for a N^2 clock cycles before setting run high. 
 
 module start_delay #(
     parameter N = 5   // delay = 2^N clock cycles

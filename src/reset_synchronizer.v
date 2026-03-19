@@ -6,8 +6,8 @@
 
 module reset_synchronizer (
     input  wire clk,
-    input  wire reset_n_async,   // asynchronous active-low reset
-    output wire reset_n_sync     // synchronized active-low reset
+    input  wire reset_n_async, // asynchronous active-low reset
+    output wire reset_n_sync // synchronized active-low reset
 );
 
 reg ff1;

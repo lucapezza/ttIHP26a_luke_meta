@@ -74,7 +74,7 @@ set_timing_derate -late [expr 1+[expr $::env(TIME_DERATING_CONSTRAINT) / 100]]
 
 # Declare asynchronous relationship (not needed)
 #create_clock -name del_clk -period 20.0 [get_pins meta_top_inst/tunable_delay_inst/or4_tunable_delay_out/sg13g2_or4_2_inst/X]
-create_clock -name del_clk -period 20.0 [get_pins meta_top_inst/tunable_delay_inst/or2_tunable_delay_out/sg13g2_or2_2_inst/X]
+create_clock -name del_clk -period 20.0 [get_pins u_meta_top/u_tunable_delay/u_or2_tunable_delay_out/u_sg13g2_or2_2/X]
 set_clock_groups -asynchronous \
     -group [get_clocks clk] \
     -group [get_clocks del_clk]

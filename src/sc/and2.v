@@ -17,7 +17,7 @@ module and2 (
     assign #25 out = in1 & in2;
     */
 
-    (* keep_hierarchy *) sg13g2_and2_2 sg13g2_and2_2_inst (
+    (* keep_hierarchy *) sg13g2_and2_2 u_sg13g2_and2_2 (
         .A  (in1),
         .B  (in2),
         .X  (out)

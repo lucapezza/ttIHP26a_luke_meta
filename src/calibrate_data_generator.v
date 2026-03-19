@@ -1,7 +1,8 @@
 `default_nettype none
 `timescale 1ps/1ps
 
-//
+// Author: Luke
+// A simple data generator for calibration. It generates a square wave at half the frequency of the clock.
 
 module calibrate_data_generator (
     input wire clk,

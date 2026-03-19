@@ -1,9 +1,9 @@
-/*
- * Copyright (c) 2026 Luke
- * SPDX-License-Identifier: Apache-2.0
- */
-
 `default_nettype none
+`timescale 1ps/1ps
+
+// Author: Luke
+// SPDX-License-Identifier: Apache-2.0
+// Top-level module just including pin assignment.
 
 module tt_um_luke_meta (
     input  wire [7:0] ui_in,    // Dedicated inputs
@@ -15,21 +15,14 @@ module tt_um_luke_meta (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
-
-    // All output pins must be assigned. If not used, assign to 0.
-    // assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-    // assign uio_out = 0;
-    // assign uio_oe  = 0;
-    
     
     assign uio_oe  = 8'b00000111; // Only uio_out[2:0] are outputs
     assign uio_out[7:3] = 5'b0; // Unused outputs should be tied to 0 
 
-
-    (* keep_hierarchy *) meta_top meta_top_inst (
+    (* keep_hierarchy *) meta_top u_meta_top (
         .clk(clk),
-        .rst_n(rst_n),
-        .ena(ena),
+        .reset_n(rst_n),
+        .enable(ena),
 
         .data_frequency_ctrl(ui_in[2:0]), 
         .prescaler_bypass_ctrl(ui_in[4:3]), 

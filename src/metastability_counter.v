@@ -2,7 +2,7 @@
 `timescale 1ps/1ps
 
 // Author: Luke
-// A simple start delay module. When enable goes high, it waits for a N^2 clock cycles before setting run high.
+// A simple counter to count the number of metastable events. Count up when enable is high and wraps around.
 
 module metastability_counter (
     input  wire       clk,
