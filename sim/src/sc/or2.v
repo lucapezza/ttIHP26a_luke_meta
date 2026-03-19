@@ -15,12 +15,4 @@ module or2 (
 
     assign #25 out = in1 | in2;
 
-    /*
-    (* keep_hierarchy *) sg13g2_or2_2 sg13g2_or2_2_inst (
-        .A  (in1),
-        .B  (in2),
-        .X  (out)
-    );
-    */
-
 endmodule

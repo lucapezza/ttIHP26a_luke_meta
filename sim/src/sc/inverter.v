@@ -17,11 +17,4 @@ module inverter (
 
     assign #25 out = ~in;
 
-    /*
-    (* keep_hierarchy *) sg13g2_inv_4 sg13g2_inv_4_inst (
-        .A  (in),
-        .Y  (out)
-    );
-    */
-
 endmodule
