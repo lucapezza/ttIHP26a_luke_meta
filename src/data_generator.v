@@ -1,7 +1,8 @@
 `default_nettype none
 `timescale 1ps/1ps
 
-//
+// Author: Luke
+// A data generator for the metastability detector. It consists of a tunable ring oscillator and some dividers.
 
 module one_hot_encoder_3to8 (
     input  wire [2:0] in,
@@ -28,27 +29,6 @@ module one_hot_encoder_2to4 (
     assign out[1] = ~in[1] &  in[0];
     assign out[2] =  in[1] & ~in[0];
     assign out[3] =  in[1] &  in[0];
-
-endmodule
-
-// A rippledivider by 2 and 4.
-module ripple_divider_no (
-    input  wire clk_in,
-    output wire div2,
-    output wire div4
-);
-
-    reg q0 = 1'b0;
-    reg q1 = 1'b0;
-
-    always @(posedge clk_in)
-        q0 <= ~q0;
-
-    always @(posedge q0)
-        q1 <= ~q1;
-
-    assign div2 = q0;
-    assign div4 = q1;
 
 endmodule
 
@@ -97,8 +77,6 @@ module ripple_divider (
 
 endmodule
 
-// A generator of async data. It consists of a tunable ring oscillator and some dividers. 
-// Standard cell gates are used in the oscillator path for boolean expression to avoid glitches.
 module data_generator (
     input wire reset_n, //(0 = reset, 1 = run)
     input wire enable, //(0 = stop, 1 = run)

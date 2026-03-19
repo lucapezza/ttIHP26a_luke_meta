@@ -25,21 +25,22 @@ module tt_um_luke_meta (
     assign uio_oe  = 8'b00000111; // Only uio_out[2:0] are outputs
     assign uio_out[7:3] = 5'b0; // Unused outputs should be tied to 0 
 
+
     (* keep_hierarchy *) meta_top meta_top_inst (
         .clk(clk),
         .rst_n(rst_n),
         .ena(ena),
 
-        .ring_ctrl_in(ui_in[2:0]), 
-        .prescaler_bypass_ctrl_in(ui_in[4:3]), 
-        .external_data_in(ui_in[5]), 
-        .detector_1_2_select_in(ui_in[6]), 
-        .calibration_mode_in(ui_in[7]),
+        .data_frequency_ctrl(ui_in[2:0]), 
+        .prescaler_bypass_ctrl(ui_in[4:3]), 
+        .external_data(ui_in[5]), 
+        .detector_select(ui_in[6]), 
+        .calibration_mode(ui_in[7]),
 
-        .metastability_detected_out(uio_out[0]),
-        .internal_data_out(uio_out[1]),
-        .clk_delayed_monitor_out(uio_out[2]),
-        .tune_delay_ctrl_in(uio_in[7:3]), 
+        .metastability_detected(uio_out[0]),
+        .data_monitor(uio_out[1]),
+        .tune_delay_monitor(uio_out[2]),
+        .tune_delay_ctrl(uio_in[7:3]), 
 
         .metastability_count_out(uo_out) 
     );
@@ -47,3 +48,4 @@ module tt_um_luke_meta (
     wire _unused = &{ uio_in[2:0] };
 
 endmodule
+

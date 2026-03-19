@@ -11,17 +11,17 @@ module meta_top (
     input  wire       rst_n,     // reset_n - low to reset
     input  wire       ena,      // becomes 1 when the design is powered
 
-    output wire clk_delayed_monitor_out,
-    output wire metastability_detected_out,
-    output wire internal_data_out,
+    output wire tune_delay_monitor,
+    output wire metastability_detected,
+    output wire data_monitor,
     
-    input  wire external_data_in,
-    input  wire calibration_mode_in,
-    input  wire detector_1_2_select_in, // 1 for detector 1, 0 for detector 2
+    input  wire external_data,
+    input  wire calibration_mode,
+    input  wire detector_select, // 1 for detector 1, 0 for detector 2
 
-    input  wire [4:0] tune_delay_ctrl_in,
-    input  wire [2:0] ring_ctrl_in,
-    input  wire [1:0] prescaler_bypass_ctrl_in,
+    input  wire [4:0] tune_delay_ctrl,
+    input  wire [2:0] data_frequency_ctrl,
+    input  wire [1:0] prescaler_bypass_ctrl,
 
     output wire [7:0] metastability_count_out
 );
@@ -29,7 +29,7 @@ module meta_top (
     // Tunable delay
     wire clk_delayed;
     (* keep_hierarchy *) tunable_delay tunable_delay_inst (
-        .td(tune_delay_ctrl_in), // tunable delay control
+        .td(tune_delay_ctrl), // tunable delay control
         .in(clk),
         .out(clk_delayed)
     );
@@ -65,9 +65,9 @@ module meta_top (
     (* keep_hierarchy *) data_generator data_generator_inst (
         .reset_n(rst_n_sync),
         .enable(ena_delayed),
-        .rc(ring_ctrl_in), // ring control
-        .pb(prescaler_bypass_ctrl_in), // prescaler-bypass control
-        .data_in_bypass(external_data_in),
+        .rc(data_frequency_ctrl), // ring control
+        .pb(prescaler_bypass_ctrl), // prescaler-bypass control
+        .data_in_bypass(external_data),
         .data_out(data)
     );
 
@@ -80,11 +80,11 @@ module meta_top (
     );
 
    // 
-    wire calibration_mode_in_sync;
+    wire calibration_mode_sync;
     (* keep_hierarchy *) input_synchronizer input_synchronizer_calibration_mode_inst (
         .clk(clk),
-        .async_in(calibration_mode_in),
-        .sync_out(calibration_mode_in_sync)
+        .async_in(calibration_mode),
+        .sync_out(calibration_mode_sync)
     );
 
     // Metastability detector
@@ -93,7 +93,7 @@ module meta_top (
         .clk(clk),
         .clk_delayed(clk_delayed),
         .reset_n(rst_n_sync),
-        .calibrate(calibration_mode_in_sync), 
+        .calibrate(calibration_mode_sync), 
         .calibrate_data(calibrate_data), 
         .data(data),
         .metastability(metastability_1)
@@ -104,14 +104,14 @@ module meta_top (
         .clk(clk),
         .clk_delayed(clk_delayed),
         .reset_n(rst_n_sync),
-        .calibrate(calibration_mode_in_sync), 
+        .calibrate(calibration_mode_sync), 
         .calibrate_data(calibrate_data), 
         .data(data),
         .metastability(metastability_2)
     );
 
     wire metastability;
-    assign metastability = detector_1_2_select_in ? metastability_2 : metastability_1; // select which detector to use 
+    assign metastability = detector_select ? metastability_2 : metastability_1; // select which detector to use 
 
     // Metastability counter
     (* keep_hierarchy *) metastability_counter metastability_counter_inst (
@@ -121,8 +121,8 @@ module meta_top (
         .count(metastability_count_out)
     );
 
-    assign clk_delayed_monitor_out = clk_delayed ^ clk; // for measuring the actual delay
-    assign internal_data_out = data; // for checking the data pattern
-    assign metastability_detected_out = metastability; // for checking if metastability is detected
+    assign tune_delay_monitor = clk_delayed ^ clk; // for measuring the actual delay
+    assign data_monitor = data; // for checking the data pattern
+    assign metastability_detected = metastability; // for checking if metastability is detected
 
 endmodule
