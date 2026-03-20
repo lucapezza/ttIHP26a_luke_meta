@@ -159,9 +159,10 @@ See tables below for the specific function.
 
 ## How to use
 
-Configure the control inputs to select the desired data source, data rate, delay setting, and detector implementation. The primary output of interest is `metastability_count_out`, which reflects the number of detected events under the chosen configuration. By running experiments across different data rates and delay settings, the circuit can be used to characterize metastability-related parameters of the flip-flop under test.
+Configure the control inputs to select the desired data source, data rate, delay setting, and detector implementation. The primary output of interest is `metastability_count`, which reflects the number of detected events under the chosen configuration. By running experiments across different data rates and delay settings, the circuit can be used to characterize metastability-related parameters of the flip-flop under test.
 
-
+---
+---
 
 # Tiny Tapeout Chisel Project Template
 
