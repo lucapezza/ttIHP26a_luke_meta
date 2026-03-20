@@ -13,7 +13,7 @@ A metastability detector observes the sampled signals and identifies events. By 
 ### Block diagram
 A cute hand-drawn block diagram of the circuit is shown below. Red signal names denote outputs, purple denote inputs, and black denote internal signals. A small description of the most important blocks is provided in the following. For a detailed description of the input and output signal and timing table see the following sections.
 
-![](block.jpg)
+![](docs/block.jpg)
 
 ### Data generator
 
@@ -36,11 +36,11 @@ Two different detector implementations are provided, each capturing metastabilit
 
 **Detector 1**  
 
-![](v1.jpg)
+![](docs/v1.jpg)
 
 **Detector 2**  
 
-![](v2.jpg)
+![](docs/v2.jpg)
 
 The active detector is selected via `detector_select`. This allows comparison of detection sensitivity and robustness across implementations.
 
