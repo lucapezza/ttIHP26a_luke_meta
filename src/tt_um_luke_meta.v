@@ -35,7 +35,7 @@ module tt_um_luke_meta (
         .tune_delay_monitor(uio_out[2]),
         .tune_delay_ctrl(uio_in[7:3]), 
 
-        .metastability_count_out(uo_out) 
+        .metastability_count(uo_out) 
     );
 
     wire _unused = &{ uio_in[2:0] };

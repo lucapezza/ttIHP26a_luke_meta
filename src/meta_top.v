@@ -12,7 +12,7 @@ module meta_top (
     input  wire [2:0] data_frequency_ctrl,
     input  wire [1:0] prescaler_bypass_ctrl,
     input  wire external_data,
-    input  wire detector_select, // 1 for detector 1, 0 for detector 2
+    input  wire detector_select,
     input  wire calibration_mode,
 
     output wire metastability_detected,
@@ -20,7 +20,7 @@ module meta_top (
     output wire tune_delay_monitor,
     input  wire [4:0] tune_delay_ctrl,
 
-    output wire [7:0] metastability_count_out
+    output wire [7:0] metastability_count
 );
 
     // Tunable delay
@@ -116,7 +116,7 @@ module meta_top (
         .clk(clk),
         .reset_n(reset_n_sync),
         .enable(metastability),
-        .count(metastability_count_out)
+        .count(metastability_count)
     );
 
     assign tune_delay_monitor = clk_delayed ^ clk; // for measuring the actual delay
